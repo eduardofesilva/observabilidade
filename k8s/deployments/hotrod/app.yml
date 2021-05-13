@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    app: hotrod
+  name: hotrod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hotrod
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        app: hotrod
+    spec:
+      containers:
+        - args:
+            - all
+          env:
+            - name: JAEGER_AGENT_HOST
+              value: jaeger
+            - name: JAEGER_AGENT_PORT
+              value: "6831"
+            - name: JAEGER_SAMPLE_TYPE
+              value: const
+            - name: JAEGER_SAMPLER_PARAM
+              value: "1"
+            - name: JAEGER_TAGS
+              value: app=hotrod
+          image: jaegertracing/example-hotrod:latest
+          name: hotrod
+          ports:
+            - containerPort: 8080
+          resources: {}
+      restartPolicy: Always
+status: {}
